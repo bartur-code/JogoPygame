@@ -20,6 +20,10 @@ CINZA = (200, 200, 200)
 fonte_titulo = pygame.font.SysFont("arial", 64)
 fonte_botao = pygame.font.SysFont("arial", 32)
 
+# Fundo de iníco
+fundo_inicio = pygame.image.load("imagens/fundo_inicio.png").convert()
+fundo_inicio = pygame.transform.scale(fundo_inicio, (LARGURA, ALTURA))
+
 # Texto
 titulo = fonte_titulo.render("BREAKOUT", True, AZUL)
 
@@ -30,7 +34,8 @@ botao_sair = pygame.Rect(300, 370, 200, 50)
 # Loop principal
 def tela_inicio():
     while True:
-        tela.fill(PRETO)
+        tela.blit(fundo_inicio, (0, 0))
+
 
         # Eventos
         for event in pygame.event.get():
@@ -60,4 +65,5 @@ def tela_inicio():
 
         pygame.display.update()
         
+
 tela_inicio()

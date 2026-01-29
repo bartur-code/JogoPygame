@@ -30,7 +30,7 @@ botao_sair = pygame.Rect(300, 370, 200, 50)
 # Loop principal
 def tela_inicio():
     while True:
-        tela.fill(PRETO)
+        tela.blit(fundo, (0, 0))
 
         # Eventos
         for event in pygame.event.get():
@@ -62,4 +62,5 @@ def tela_inicio():
         
 
 tela_inicio()
+
 

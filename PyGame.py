@@ -8,6 +8,9 @@ pygame.init()
 LARGURA = 800
 ALTURA = 600
 tela = pygame.display.set_mode((LARGURA, ALTURA))
+fundo = pygame.image.load("fundo.png").convert()
+fundo = pygame.transform.scale(fundo, (LARGURA, ALTURA))
+
 pygame.display.set_caption("Breakout")
 
 # Cores
@@ -62,5 +65,6 @@ def tela_inicio():
         
 
 tela_inicio()
+
 
 

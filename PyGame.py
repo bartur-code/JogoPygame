@@ -16,7 +16,7 @@ pygame.display.set_caption("Breakout")
 
 # Cores
 BRANCO = (255, 255, 255)
-PRETO = (0, 0, 0)
+PRETO = (0, 0, 0)       
 AZUL = (30, 144, 255)
 CINZA = (200, 200, 200)
 
@@ -36,6 +36,8 @@ def tela_inicio():
     while True:
         tela.blit(fundo, (0, 0))
 
+
+
         # Eventos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -44,7 +46,8 @@ def tela_inicio():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if botao_iniciar.collidepoint(event.pos):
-                    print("Iniciar jogo!")  # Aqui você chama o jogo depois
+                    return  # sai do menu
+                            # Aqui você chama o jogo depois
                 if botao_sair.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
@@ -74,8 +77,43 @@ def tela_inicio():
         pygame.display.update()
         clock.tick(60)
 
+def jogo():
+    barra = pygame.Rect(350, 550, 100, 15)
+    bola = pygame.Rect(390, 300, 15, 15)
+
+    vel_x = 5
+    vel_y = -5
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        # Movimento da barra
+        teclas = pygame.key.get_pressed()
+        if teclas[pygame.K_LEFT] and barra.left > 0:
+            barra.x -= 7
+        if teclas[pygame.K_RIGHT] and barra.right < LARGURA:
+            barra.x += 7
+
+        # Movimento da bola
+        bola.x += vel_x
+        bola.y += vel_y
+
+        if bola.left <= 0 or bola.right >= LARGURA:
+            vel_x *= -1
+        if bola.top <= 0:
+            vel_y *= -1
+        if bola.colliderect(barra):
+            vel_y *= -1
+
+        tela.blit(fundo, (0, 0))  # fundo no jogo
+        pygame.draw.rect(tela, AZUL, barra)
+        pygame.draw.ellipse(tela, BRANCO, bola)
+
+        pygame.display.update()
+        clock.tick(60)
+
 tela_inicio()
-
-
-
-
+jogo()  

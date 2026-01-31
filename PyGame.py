@@ -3,6 +3,7 @@ import sys
 
 # Inicialização
 pygame.init()
+clock = pygame.time.Clock()
 
 # Configurações da tela
 LARGURA = 800
@@ -57,14 +58,24 @@ def tela_inicio():
 
         texto_iniciar = fonte_botao.render("Iniciar Jogo", True, PRETO)
         texto_sair = fonte_botao.render("Sair", True, PRETO)
+        
+        tela.blit(
+            texto_iniciar,
+            (botao_iniciar.centerx - texto_iniciar.get_width() // 2,
+             botao_iniciar.centery - texto_iniciar.get_height() // 2)
+        )
 
-        tela.blit(texto_iniciar, (botao_iniciar.x + 30, botao_iniciar.y + 10))
-        tela.blit(texto_sair, (botao_sair.x + 80, botao_sair.y + 10))
+        tela.blit(
+            texto_sair,
+            (botao_sair.centerx - texto_sair.get_width() // 2,
+             botao_sair.centery - texto_sair.get_height() // 2)
+        )
 
         pygame.display.update()
-        
+        clock.tick(60)
 
 tela_inicio()
+
 
 
 

@@ -108,7 +108,7 @@ def jogo():
         if bola.colliderect(barra):
             vel_y *= -1
 
-        tela.blit(fundo, (0, 0))  # fundo no jogo
+        tela.fill(PRETO)  # fundo no jogo
         pygame.draw.rect(tela, AZUL, barra)
         pygame.draw.ellipse(tela, BRANCO, bola)
 
@@ -117,3 +117,4 @@ def jogo():
 
 tela_inicio()
 jogo()  
+

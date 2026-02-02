@@ -1,5 +1,7 @@
 import pygame
 import sys
+import random
+
 
 # Inicialização
 pygame.init()
@@ -19,6 +21,14 @@ BRANCO = (255, 255, 255)
 PRETO = (0, 0, 0)       
 AZUL = (30, 144, 255)
 CINZA = (200, 200, 200)
+CORES_BLOCOS = [
+    (255, 0, 0),     # vermelho
+    (255, 165, 0),   # laranja
+    (255, 255, 0),   # amarelo
+    (0, 200, 0),     # verde
+    (0, 150, 255)    # azul
+]
+
 
 # Fontes
 fonte_titulo = pygame.font.SysFont("arial", 64)
@@ -40,7 +50,10 @@ def criar_blocos():
             x = coluna * (BLOCO_LARGURA + ESPACO) + 35
             y = linha * (BLOCO_ALTURA + ESPACO) + 60
             bloco = pygame.Rect(x, y, BLOCO_LARGURA, BLOCO_ALTURA)
-            blocos.append(bloco)
+
+            cor = random.choice(CORES_BLOCOS)  # 🎲 cor aleatória
+
+            blocos.append((bloco, cor))
 
     return blocos
 
@@ -108,6 +121,9 @@ def jogo():
 
     blocos = criar_blocos()
     game_over = False
+    blocos = criar_blocos()
+    game_over = False
+    pontos = 0 
 
 
     while True:
@@ -139,10 +155,11 @@ def jogo():
                 vel_y *= -1
 
             # 💥 colisão com blocos
-            for bloco in blocos[:]:
-                if bola.colliderect(bloco):
-                    blocos.remove(bloco)
+            for bloco, cor in blocos[:]:
+                 if bola.colliderect(bloco):
+                    blocos.remove((bloco, cor))
                     vel_y *= -1
+                    pontos += 10
                     break
 
             if bola.bottom > ALTURA:
@@ -150,12 +167,17 @@ def jogo():
 
         tela.fill(PRETO)
 
-        for bloco in blocos:
-            pygame.draw.rect(tela, CINZA, bloco)
+        for bloco, cor in blocos:
+             pygame.draw.rect(tela, cor, bloco)
+
 
     
         pygame.draw.rect(tela, AZUL, barra)
         pygame.draw.ellipse(tela, BRANCO, bola)
+
+        # Pontuação
+        texto_pontos = fonte_botao.render(f"Pontos: {pontos}", True, BRANCO)
+        tela.blit(texto_pontos, (10, 10))
 
         if game_over:
             texto = fonte_gameover.render("GAME OVER", True, BRANCO)
@@ -175,6 +197,6 @@ def jogo():
         pygame.display.update()
         clock.tick(60)
 
-while True
+while True:
     tela_inicio()
     jogo()  

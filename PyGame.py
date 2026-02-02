@@ -23,6 +23,7 @@ CINZA = (200, 200, 200)
 # Fontes
 fonte_titulo = pygame.font.SysFont("arial", 64)
 fonte_botao = pygame.font.SysFont("arial", 32)
+fonte_gameover = pygame.font.SysFont("arial", 48) 
 
 # Blocos
 BLOCO_LARGURA = 70
@@ -49,6 +50,7 @@ titulo = fonte_titulo.render("BREAKOUT", True, AZUL)
 # Botões
 botao_iniciar = pygame.Rect(300, 300, 200, 50)
 botao_sair = pygame.Rect(300, 370, 200, 50)
+botao_reiniciar = pygame.Rect(300, 320, 200, 50)
 
 # Loop principal
 def tela_inicio():
@@ -105,6 +107,7 @@ def jogo():
 
 
     blocos = criar_blocos()
+    game_over = False
 
 
     while True:
@@ -113,43 +116,65 @@ def jogo():
                 pygame.quit()
                 sys.exit()
 
-        # Movimento da barra
+            if game_over and event.type == pygame.MOUSEBUTTONDOWN:
+                if botao_reiniciar.collidepoint(event.pos):
+                    return
+                
         teclas = pygame.key.get_pressed()
-        if teclas[pygame.K_LEFT] and barra.left > 0:
-            barra.x -= 7
-        if teclas[pygame.K_RIGHT] and barra.right < LARGURA:
-            barra.x += 7
 
-        # Movimento da bola
-        bola.x += vel_x
-        bola.y += vel_y
-        
+        if not game_over:       
+            if teclas[pygame.K_LEFT] and barra.left > 0:
+                barra.x -= 7
+            if teclas[pygame.K_RIGHT] and barra.right < LARGURA:
+                barra.x += 7
 
-        if bola.left <= 0 or bola.right >= LARGURA:
-            vel_x *= -1
-        if bola.top <= 0:
-            vel_y *= -1
-        if bola.colliderect(barra):
-            vel_y *= -1
+            bola.x += vel_x
+            bola.y += vel_y
 
-        # 💥 colisão com blocos
-        for bloco in blocos[:]:
-            if bola.colliderect(bloco):
-                blocos.remove(bloco)
+            if bola.left <= 0 or bola.right >= LARGURA:
+                vel_x *= -1
+            if bola.top <= 0:
                 vel_y *= -1
-                break
+            if bola.colliderect(barra):
+                vel_y *= -1
+
+            # 💥 colisão com blocos
+            for bloco in blocos[:]:
+                if bola.colliderect(bloco):
+                    blocos.remove(bloco)
+                    vel_y *= -1
+                    break
+
+            if bola.bottom > ALTURA:
+                    game_over = True
 
         tela.fill(PRETO)
 
         for bloco in blocos:
             pygame.draw.rect(tela, CINZA, bloco)
 
-
+    
         pygame.draw.rect(tela, AZUL, barra)
         pygame.draw.ellipse(tela, BRANCO, bola)
+
+        if game_over:
+            texto = fonte_gameover.render("GAME OVER", True, BRANCO)
+            tela.blit(
+                texto,
+                (LARGURA // 2 - texto.get_width() // 2, 220)
+            )
+
+            pygame.draw.rect(tela, CINZA, botao_reiniciar)
+            texto_reiniciar = fonte_botao.render("Reiniciar", True, PRETO)
+            tela.blit(
+                texto_reiniciar,
+                (botao_reiniciar.centerx - texto_reiniciar.get_width() // 2,
+                 botao_reiniciar.centery - texto_reiniciar.get_height() // 2)
+            )
 
         pygame.display.update()
         clock.tick(60)
 
-tela_inicio()
-jogo()  
+while True
+    tela_inicio()
+    jogo()  

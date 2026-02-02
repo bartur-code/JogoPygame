@@ -24,6 +24,25 @@ CINZA = (200, 200, 200)
 fonte_titulo = pygame.font.SysFont("arial", 64)
 fonte_botao = pygame.font.SysFont("arial", 32)
 
+# Blocos
+BLOCO_LARGURA = 70
+BLOCO_ALTURA = 25
+ESPACO = 10
+
+def criar_blocos():
+    blocos = []
+    linhas = 5
+    colunas = 10
+
+    for linha in range(linhas):
+        for coluna in range(colunas):
+            x = coluna * (BLOCO_LARGURA + ESPACO) + 35
+            y = linha * (BLOCO_ALTURA + ESPACO) + 60
+            bloco = pygame.Rect(x, y, BLOCO_LARGURA, BLOCO_ALTURA)
+            blocos.append(bloco)
+
+    return blocos
+
 # Texto
 titulo = fonte_titulo.render("BREAKOUT", True, AZUL)
 
@@ -55,7 +74,7 @@ def tela_inicio():
         # Desenho do título
         tela.blit(titulo, (LARGURA // 2 - titulo.get_width() // 2, 150))
 
-        # Desenho dos botões
+        # Desenho dos bot   ões
         pygame.draw.rect(tela, CINZA, botao_iniciar)
         pygame.draw.rect(tela, CINZA, botao_sair)
 
@@ -84,6 +103,10 @@ def jogo():
     vel_x = 5
     vel_y = -5
 
+
+    blocos = criar_blocos()
+
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -100,6 +123,7 @@ def jogo():
         # Movimento da bola
         bola.x += vel_x
         bola.y += vel_y
+        
 
         if bola.left <= 0 or bola.right >= LARGURA:
             vel_x *= -1
@@ -108,7 +132,19 @@ def jogo():
         if bola.colliderect(barra):
             vel_y *= -1
 
-        tela.fill(PRETO)  # fundo no jogo
+        # 💥 colisão com blocos
+        for bloco in blocos[:]:
+            if bola.colliderect(bloco):
+                blocos.remove(bloco)
+                vel_y *= -1
+                break
+
+        tela.fill(PRETO)
+
+        for bloco in blocos:
+            pygame.draw.rect(tela, CINZA, bloco)
+
+
         pygame.draw.rect(tela, AZUL, barra)
         pygame.draw.ellipse(tela, BRANCO, bola)
 
@@ -117,4 +153,3 @@ def jogo():
 
 tela_inicio()
 jogo()  
-

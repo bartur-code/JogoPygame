@@ -24,6 +24,7 @@ CORES_BLOCOS = [
     (0, 200, 0),
     (0, 150, 255)
 ]
+
 # Fontes
 fonte_titulo = pygame.font.SysFont("arial", 64)
 fonte_botao = pygame.font.SysFont("arial", 32)
@@ -79,7 +80,7 @@ def jogo():
 
         teclas = pygame.key.get_pressed()
 
-                # Movimento da barra
+        # Movimento da barra
         if teclas[pygame.K_LEFT] and barra.left > 0:
             barra.x -= 7
             bola_lancada = True
@@ -113,7 +114,8 @@ def jogo():
                 vel_y *= -1
                 pontos += 10
                 break
-     # Perde vida
+
+        # Perde vida
         if bola.bottom > ALTURA:
             vidas -= 1
             bola_lancada = False
@@ -131,7 +133,8 @@ def jogo():
                 blocos = criar_blocos(fase)
                 bola_lancada = False
                 vel_x = vel_y = 0
-                      # Desenho
+
+        # Desenho
         tela.fill(PRETO)
 
         for bloco, cor in blocos:

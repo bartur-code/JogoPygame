@@ -131,3 +131,38 @@ def jogo():
                 blocos = criar_blocos(fase)
                 bola_lancada = False
                 vel_x = vel_y = 0
+                      # Desenho
+        tela.fill(PRETO)
+
+        for bloco, cor in blocos:
+            pygame.draw.rect(tela, cor, bloco)
+
+        pygame.draw.rect(tela, AZUL, barra)
+        pygame.draw.ellipse(tela, BRANCO, bola)
+
+        # HUD
+        tela.blit(fonte_botao.render(f"Pontos: {pontos}", True, BRANCO), (10, 10))
+        tela.blit(fonte_botao.render(f"Vidas: ❤️ x{vidas}", True, BRANCO), (10, 40))
+        tela.blit(fonte_botao.render(f"Fase: {fase}", True, BRANCO), (10, 70))
+
+        if game_over:
+            msg = fonte_mensagem.render("GAME OVER", True, BRANCO)
+            tela.blit(msg, (LARGURA//2 - msg.get_width()//2, 250))
+
+        if venceu:
+            msg = fonte_mensagem.render("VOCÊ VENCEU!", True, BRANCO)
+            tela.blit(msg, (LARGURA//2 - msg.get_width()//2, 250))
+
+        if game_over or venceu:
+            pygame.draw.rect(tela, CINZA, botao_reiniciar)
+            texto = fonte_botao.render("Reiniciar", True, PRETO)
+            tela.blit(
+                texto,
+                (botao_reiniciar.centerx - texto.get_width() // 2,
+                 botao_reiniciar.centery - texto.get_height() // 2)
+            )
+
+        pygame.display.update()
+        clock.tick(60)
+
+jogo()

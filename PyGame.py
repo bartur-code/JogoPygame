@@ -78,3 +78,38 @@ def jogo():
                     return
 
         teclas = pygame.key.get_pressed()
+
+                # Movimento da barra
+        if teclas[pygame.K_LEFT] and barra.left > 0:
+            barra.x -= 7
+            bola_lancada = True
+        if teclas[pygame.K_RIGHT] and barra.right < LARGURA:
+            barra.x += 7
+            bola_lancada = True
+
+        # Bola só começa após mover a barra
+        if not bola_lancada:
+            bola.centerx = barra.centerx
+            bola.bottom = barra.top
+        else:
+            if vel_x == 0 and vel_y == 0:
+                vel_x = 4 + fase
+                vel_y = -(4 + fase)
+
+            bola.x += vel_x
+            bola.y += vel_y
+
+        # Colisões
+        if bola.left <= 0 or bola.right >= LARGURA:
+            vel_x *= -1
+        if bola.top <= 0:
+            vel_y *= -1
+        if bola.colliderect(barra):
+            vel_y *= -1
+
+        for bloco, cor in blocos[:]:
+            if bola.colliderect(bloco):
+                blocos.remove((bloco, cor))
+                vel_y *= -1
+                pontos += 10
+                break

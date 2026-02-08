@@ -113,3 +113,21 @@ def jogo():
                 vel_y *= -1
                 pontos += 10
                 break
+     # Perde vida
+        if bola.bottom > ALTURA:
+            vidas -= 1
+            bola_lancada = False
+            vel_x = vel_y = 0
+
+            if vidas == 0:
+                game_over = True
+
+        # Passar de fase
+        if not blocos and not game_over:
+            fase += 1
+            if fase > 3:
+                venceu = True
+            else:
+                blocos = criar_blocos(fase)
+                bola_lancada = False
+                vel_x = vel_y = 0
